@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import MainLayout from './layouts/MainLayout'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Matches from './pages/Matches'
-import Bets from './pages/Bets'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Matches from "./pages/Matches";
+import Bets from "./pages/Bets";
 
 export default function App() {
   return (
@@ -12,12 +12,12 @@ export default function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/matches" element={<Matches />} />
-          <Route path="/bets" element={<Bets />} />
+          <Route path="/mecze" element={<Matches />} />
+          <Route path="/zakłady" element={<Bets />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/logowanie" element={<Login />} />
+        <Route path="/rejestracja" element={<Register />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }

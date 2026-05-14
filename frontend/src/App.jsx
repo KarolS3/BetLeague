@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Matches from "./pages/Matches";
 import Bets from "./pages/Bets";
-
+import PrivateRoute from './components/PrivateRoute' 
 export default function App() {
   return (
     <BrowserRouter>
@@ -13,7 +13,7 @@ export default function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/mecze" element={<Matches />} />
-          <Route path="/zakłady" element={<Bets />} />
+          <Route path="/zakłady" element={<PrivateRoute><Bets /></PrivateRoute>} /> 
         </Route>
         <Route path="/logowanie" element={<Login />} />
         <Route path="/rejestracja" element={<Register />} />

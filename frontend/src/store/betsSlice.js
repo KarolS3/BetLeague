@@ -1,14 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from '../api/axios' 
 
 export const fetchBets = createAsyncThunk(
   "bets/fetch",
   async (_, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token;
-      const res = await axios.get("/api/bets", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get("/api/bets", {});
       return res.data;
     } catch (err) {
       return rejectWithValue("Błąd pobierania zakładów");
@@ -21,9 +19,7 @@ export const placeBet = createAsyncThunk(
   async (betData, { getState, rejectWithValue }) => {
     try {
       const token = getState().auth.token;
-      const res = await axios.post("/api/bets", betData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.post("/api/bets", betData, {});
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || "Błąd obstawiania");

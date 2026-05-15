@@ -1,14 +1,33 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import { registerUser } from "../store/authSlice";
+
+import Toast from "../components/Toast";
 
 export default function Register() {
   const [form, setForm] = useState({ email: "", password: "", confirm: "" });
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (form.password !== form.confirm) return alert("Hasła się nie zgadzają");
-    console.log("register:", form);
-    // TODO: podłączyć do Redux action → API
+
+    if (form.password !== form.confirm)
+      return setToast({ msg: "Hasła się nie zgadzają", type: "error" });
+
+    const result = await dispatch(
+      registerUser({ email: form.email, password: form.password }),
+    );
+
+    if (registerUser.fulfilled.match(result)) {
+      setToast({ msg: "Konto utworzone!", type: "success" });
+
+      setTimeout(() => navigate("/"), 900);
+    } else {
+      setToast({ msg: result.payload || "Błąd rejestracji", type: "error" });
+    }
   }
 
   return (
@@ -51,6 +70,11 @@ export default function Register() {
           </button>
         </div>
       </div>
+      <Toast
+        message={toast.msg}
+        type={toast.type}
+        onClose={() => setToast({ msg: "" })}
+      />
     </div>
   );
 }

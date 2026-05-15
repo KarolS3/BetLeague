@@ -1,14 +1,37 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
+import { Link, useNavigate } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import { loginUser } from "../store/authSlice";
+
+import Toast from "../components/Toast";
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log("login:", form);
-    // TODO: podłączyć do Redux action → API
+
+    const result = await dispatch(
+      loginUser({ email: form.email, password: form.password }),
+    );
+
+    if (loginUser.fulfilled.match(result)) {
+      setToast({ msg: "Zalogowano pomyślnie!", type: "success" });
+
+      setTimeout(() => navigate("/"), 900);
+    } else {
+      setToast({ msg: result.payload || "Błąd logowania", type: "error" });
+    }
   }
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const { loading } = useSelector((s) => s.auth);
+
+  const [toast, setToast] = useState({ msg: "", type: "" });
 
   return (
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
@@ -37,12 +60,18 @@ export default function Login() {
           />
           <button
             onClick={handleSubmit}
-            className="bg-emerald-500 hover:bg-emerald-400 text-white rounded py-2.5 text-sm font-medium transition-colors"
+            disabled={loading}
+            className="bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-white rounded py-2.5 text-sm font-medium transition-colors"
           >
-            Zaloguj się
+            {loading ? "Logowanie..." : "Zaloguj się"}
           </button>
         </div>
       </div>
+      <Toast
+        message={toast.msg}
+        type={toast.type}
+        onClose={() => setToast({ msg: "" })}
+      />
     </div>
   );
 }

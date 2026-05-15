@@ -1,4 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+import { logout } from "../store/authSlice";
 
 export default function Navbar() {
   const { pathname } = useLocation();
@@ -7,6 +10,9 @@ export default function Navbar() {
     { to: "/mecze", label: "Mecze" },
     { to: "/zakłady", label: "Moje zakłady" },
   ];
+  const { user, token } = useSelector((s) => s.auth);
+
+  const dispatch = useDispatch();
   return (
     <nav className="bg-zinc-950 border-b border-zinc-800 px-6 py-0 flex items-center justify-between h-14">
       <span className="text-white font-bold text-lg tracking-tight">
@@ -27,20 +33,36 @@ export default function Navbar() {
           </Link>
         ))}
       </div>
-      <div className="flex gap-2">
-        <Link
-          to="/logowanie"
-          className="text-sm text-zinc-400 hover:text-white px-3 py-1.5 rounded"
-        >
-          Zaloguj
-        </Link>
-        <Link
-          to="/rejestracja"
-          className="text-sm bg-emerald-500 hover:bg-emerald-400 text-white px-3 py-1.5 rounded font-medium transition-colors"
-        >
-          Zarejestruj się
-        </Link>
-      </div>
+      {token ? (
+        <div className="flex items-center gap-4">
+          <span className="text-emerald-400 text-sm font-medium">
+            {user?.balance != null ? user.balance.toFixed(2) + " zł" : "–"}
+          </span>
+
+          <button
+            onClick={() => dispatch(logout())}
+            className="text-sm text-zinc-400 hover:text-white transition-colors"
+          >
+            Wyloguj
+          </button>
+        </div>
+      ) : (
+        <div className="flex gap-2">
+          <Link
+            to="/logowanie"
+            className="text-sm text-zinc-400 hover:text-white px-3 py-1.5 rounded"
+          >
+            Zaloguj
+          </Link>
+
+          <Link
+            to="/rejestracja"
+            className="text-sm bg-emerald-500 hover:bg-emerald-400 text-white px-3 py-1.5 rounded font-medium transition-colors"
+          >
+            Zarejestruj się
+          </Link>
+        </div>
+      )}
     </nav>
   );
 }

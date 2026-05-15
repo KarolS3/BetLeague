@@ -1,37 +1,30 @@
 import { useState } from "react";
-
 import { Link, useNavigate } from "react-router-dom";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import { loginUser } from "../store/authSlice";
-
 import Toast from "../components/Toast";
+
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [toast, setToast] = useState({ msg: "", type: "" });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading } = useSelector((s) => s.auth);
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+      console.log('handleSubmit wywołany', form);
     const result = await dispatch(
       loginUser({ email: form.email, password: form.password }),
     );
-
+      console.log('result:', result);
     if (loginUser.fulfilled.match(result)) {
       setToast({ msg: "Zalogowano pomyślnie!", type: "success" });
-
       setTimeout(() => navigate("/"), 900);
     } else {
       setToast({ msg: result.payload || "Błąd logowania", type: "error" });
     }
   }
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
-
-  const { loading } = useSelector((s) => s.auth);
-
-  const [toast, setToast] = useState({ msg: "", type: "" });
 
   return (
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">

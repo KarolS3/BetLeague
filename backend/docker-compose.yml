@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+
+    environment:
+      POSTGRES_USER: betuser
+
+      POSTGRES_PASSWORD: betpass
+
+      POSTGRES_DB: betleague
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

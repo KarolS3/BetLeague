@@ -1,16 +1,14 @@
 import { useState } from "react";
-
-import { Link, useNavigate } from "react-router-dom";
-
-import { useDispatch, useSelector } from "react-redux";
-
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from 'react-router-dom'
 import { registerUser } from "../store/authSlice";
-
 import Toast from "../components/Toast";
 
 export default function Register() {
   const [form, setForm] = useState({ email: "", password: "", confirm: "" });
-
+  const [toast, setToast] = useState({ msg: "", type: "" });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   async function handleSubmit(e) {
     e.preventDefault();
 

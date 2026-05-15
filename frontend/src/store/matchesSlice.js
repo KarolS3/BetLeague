@@ -5,7 +5,7 @@ export const fetchMatches = createAsyncThunk(
   "matches/fetch",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get("/api/matches");
+      const res = await api.get("/matches");
       return res.data;
     } catch (err) {
       return rejectWithValue("Błąd pobierania meczów");
